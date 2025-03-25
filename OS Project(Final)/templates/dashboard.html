@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediPredict Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f7f9fc;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    /* Navigation */
+    .navbar {
+      background-color: #ffffff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+    }
+    
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      
+      align-items: center;
+      padding: 20px 0;
+      height: 64px;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(124, 58, 237, 0.2);
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    
+    .logo-text {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #28a89d;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+    
+    .nav-links a {
+      color: #666;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+    
+    .nav-links a:hover {
+      color: #28a89d;
+    }
+    
+    .nav-button {
+      background-color: transparent;
+      border: 1px solid #e2e8f0;
+      color: #4b5563;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .nav-button:hover {
+      background-color: rgba(124, 58, 237, 0.1);
+      color: #28a89d;
+    }
+
+    .navbar a.dashboard-active {
+      color: #2dbfb5;
+      font-weight: bold;
+  }
+    
+    /* Dashboard Content */
+    .dashboard {
+      margin-top: 80px;
+      padding-bottom: 40px;
+    }
+    
+    .welcome-section {
+      margin-bottom: 32px;
+    }
+    
+    .welcome-section h1 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .welcome-section p {
+      color: #6b7280;
+    }
+    
+    /* Alert Banner */
+    .alert-banner {
+      background-color: #fffbeb;
+      border: 2px solid #fcd34d;
+      border-radius: 8px;
+      margin-bottom: 32px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+    }
+    
+    .alert-icon {
+      background-color: #fef3c7;
+      padding: 12px;
+      border-radius: 50%;
+      color: #d97706;
+    }
+    
+    .alert-content {
+      flex: 1;
+    }
+    
+    .alert-content h4 {
+      font-weight: 700;
+      font-size: 1.125rem;
+      color: #92400e;
+      margin-bottom: 4px;
+    }
+    
+    .alert-content p {
+      color: #b45309;
+    }
+    
+    .alert-button {
+      background-color: #28a89d;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.5);
+      transition: all 0.2s;
+    }
+    
+    .alert-button:hover {
+      background-color: #28a89d;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px -1px rgba(124, 58, 237, 0.6);
+    }
+    
+    /* Health Score Card */
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: box-shadow 0.3s;
+      margin-bottom: 32px;
+    }
+    
+    .card:hover {
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-header {
+      padding: 20px 24px;
+      background: linear-gradient(to right, rgba(68, 210, 226, 0.2));
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #111827;
+    }
+    
+    .health-score {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #28a89d;
+    }
+    
+    .card-content {
+      padding: 24px;
+    }
+    
+    .progress-bar {
+      height: 12px;
+      background-color: #e2e8f0;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      width: 75%;
+      background-color: #28a89d;
+      border-radius: 6px;
+    }
+    
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-bottom: 16px;
+    }
+    
+    .card-text {
+      color: #6b7280;
+      margin-top: 16px;
+    }
+    
+    .card-footer {
+      padding: 16px 24px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    
+    .outline-button {
+      background-color: transparent;
+      border: 1px solid #e2e8f0;
+      color: #4b5563;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    
+    .outline-button:hover {
+      background-color: #f3f4f6;
+    }
+    
+    /* Stat Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    
+    @media (min-width: 768px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    
+    .stat-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      transition: box-shadow 0.3s;
+    }
+    
+    .stat-card:hover {
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stat-info p {
+      color: #6b7280;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    
+    .stat-info h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    
+    .stat-info .description {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+    
+    .stat-icon {
+      background-color: rgba(124, 58, 237, 0.1);
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #28a89d;
+    }
+    
+    /* Tips Card */
+    .tips-list {
+      list-style: none;
+    }
+    
+    .tips-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    
+    .tips-list li i {
+      color: #28a89d;
+      margin-top: 3px;
+    }
+    
+    /* Tabs */
+    .tabs {
+      margin-top: 32px;
+    }
+    
+    .tabs-list {
+      display: inline-flex;
+      background-color: #f3f4f6;
+      padding: 4px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+    
+    .tab-trigger {
+      padding: 8px 16px;
+      border-radius: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #6b7280;
+    }
+    
+    .tab-trigger.active {
+      background-color: white;
+      color: #111827;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* Prediction History */
+    .prediction-item {
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .prediction-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    
+    .prediction-title {
+      font-weight: 600;
+    }
+    
+    .prediction-date {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+    
+    .risk-low {
+      color: #10b981;
+      font-weight: 500;
+    }
+    
+    .risk-medium {
+      color: #f59e0b;
+      font-weight: 500;
+    }
+    
+    .risk-high {
+      color: #ef4444;
+      font-weight: 500;
+    }
+    
+    .prediction-recommendations {
+      font-size: 0.875rem;
+      margin-top: 8px;
+    }
+    
+    /* Empty states */
+    .empty-state {
+      text-align: center;
+      padding: 40px 0;
+    }
+    
+    .empty-icon {
+      width: 48px;
+      height: 48px;
+      color: #d1d5db;
+      margin: 0 auto 16px;
+    }
+    
+    .empty-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .empty-description {
+      color: #6b7280;
+      margin-bottom: 16px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .primary-button {
+      background-color: #28a89d;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s;
+    }
+    
+    .primary-button:hover {
+      background-color: #28a89d;
+    }
+    
+    /* Health Metrics Form */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    @media (min-width: 768px) {
+      .form-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    .form-group {
+      margin-bottom: 8px;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    
+    .form-input {
+      width: 100%;
+      height: 40px;
+      padding: 0 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background-color: white;
+      font-size: 1rem;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: #28a89d;
+      box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
+    }
+    
+    .save-button {
+      background-color: #28a89d;
+      color: white;
+      border: none;
+      padding: 8px 24px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .save-button:hover {
+      background-color: #28a89d;
+    }
+    
+    /* Health Reports */
+    .report-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .report-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .report-description {
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-stethoscope" style="color: #28a89d;"></i>
+        </div>
+        <span class="logo-text">MediPredict</span>
+      </a>
+      
+      <div class="nav-links">
+        <a href="#"><i class="fas fa-home" onclick="location.href='home'"></i> Home</a>
+        <a href="#"><i class="fas fa-heartbeat" onclick="location.href='dashboard'"></i> Predict</a>
+        <a href="#"><i class="fas fa-heart" onclick="location.href='health_info'"></i> Health Info</a>
+        <a href="#"><i class="fas fa-info-circle" onclick="location.href='about'"></i> About</a>
+      </div>
+      
+      <button class="nav-button" onclick="location.href='dashboard'" class="dashboard-active">Dashboard</button>
+    </div>
+  </nav>
+  
+  <!-- Dashboard Content -->
+  <main class="dashboard container">
+    <div class="welcome-section">
+      <h1>Welcome, User!</h1>
+      <p>Your personal health monitoring dashboard</p>
+    </div>
+    
+    <!-- Alert Banner -->
+    <div class="alert-banner">
+      <div class="alert-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <div class="alert-content">
+        <h4>Your health profile is incomplete</h4>
+        <p>Complete your health metrics to get more accurate predictions and personalized recommendations.</p>
+      </div>
+      <button class="alert-button">
+        <i class="fas fa-clipboard-check"></i>
+        Complete Now
+      </button>
+    </div>
+    
+    <!-- Health Score Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Your Health Score</h3>
+        <span class="health-score">75</span>
+      </div>
+      <div class="card-content">
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+        <div class="progress-labels">
+          <span>Needs Attention</span>
+          <span>Good</span>
+          <span>Excellent</span>
+        </div>
+        <p class="card-text">
+          This score is calculated based on your health metrics and prediction history.
+          You're doing great! Keep up the healthy habits.
+        </p>
+      </div>
+      <div class="card-footer">
+        <button class="outline-button">
+          <span>View Details</span>
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+      <!-- Stat 1 -->
+      <div class="stat-card">
+        <div class="stat-info">
+          <p>Total Predictions</p>
+          <h3>2</h3>
+          <p class="description">Health predictions made</p>
+        </div>
+        <div class="stat-icon">
+          <i class="fas fa-heartbeat"></i>
+        </div>
+      </div>
+      
+      <!-- Stat 2 -->
+      <div class="stat-card">
+        <div class="stat-info">
+          <p>Last Checkup</p>
+          <h3>2023-11-05</h3>
+          <p class="description">Most recent prediction</p>
+        </div>
+        <div class="stat-icon">
+          <i class="fas fa-calendar"></i>
+        </div>
+      </div>
+      
+      <!-- Stat 3 -->
+      <div class="stat-card">
+        <div class="stat-info">
+          <p>Risk Level</p>
+          <h3>Medium</h3>
+          <p class="description">Current health status</p>
+        </div>
+        <div class="stat-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+      </div>
+      
+      <!-- Stat 4 -->
+      <div class="stat-card">
+        <div class="stat-info">
+          <p>Profile Status</p>
+          <h3>Incomplete</h3>
+          <p class="description">Health data completeness</p>
+        </div>
+        <div class="stat-icon">
+          <i class="fas fa-user"></i>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Health Tips -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Daily Health Tips</h3>
+        <span></span>
+      </div>
+      <div class="card-content">
+        <ul class="tips-list">
+          <li>
+            <i class="fas fa-arrow-up-right"></i>
+            <span>Drink at least 8 glasses of water daily.</span>
+          </li>
+          <li>
+            <i class="fas fa-arrow-up-right"></i>
+            <span>Aim for 30 minutes of moderate exercise 5 days a week.</span>
+          </li>
+          <li>
+            <i class="fas fa-arrow-up-right"></i>
+            <span>Incorporate more leafy greens into your diet.</span>
+          </li>
+          <li>
+            <i class="fas fa-arrow-up-right"></i>
+            <span>Get 7-8 hours of sleep every night for optimal health.</span>
+          </li>
+          <li>
+            <i class="fas fa-arrow-up-right"></i>
+            <span>Practice mindfulness or meditation for stress reduction.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Detailed Information Tabs -->
+    <div class="tabs">
+      <div class="tabs-list">
+        <button class="tab-trigger active" data-tab="history">Prediction History</button>
+        <button class="tab-trigger" data-tab="health">Health Metrics</button>
+        <button class="tab-trigger" data-tab="reports">Health Reports</button>
+      </div>
+      
+      <!-- Prediction History Tab -->
+      <div class="tab-content active" id="history-tab">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Recent Predictions</h3>
+            <span></span>
+          </div>
+          <div class="card-content">
+            <div class="prediction-item">
+              <div class="prediction-header">
+                <div>
+                  <h4 class="prediction-title">Low risk of heart disease</h4>
+                  <p class="prediction-date">Date: 2023-10-15</p>
+                </div>
+                <span class="risk-low">Low Risk</span>
+              </div>
+              <p class="prediction-recommendations">Continue healthy habits, regular checkups.</p>
+            </div>
+            <div class="prediction-item">
+              <div class="prediction-header">
+                <div>
+                  <h4 class="prediction-title">Moderate risk of diabetes</h4>
+                  <p class="prediction-date">Date: 2023-11-05</p>
+                </div>
+                <span class="risk-medium">Medium Risk</span>
+              </div>
+              <p class="prediction-recommendations">Reduce sugar intake, increase physical activity.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Health Metrics Tab -->
+      <div class="tab-content" id="health-tab">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Health Metrics</h3>
+            <span></span>
+          </div>
+          <div class="card-content">
+            <div class="form-grid">
+              <div>
+                <div class="form-group">
+                  <label class="form-label" for="blood-pressure">Blood Pressure (mmHg)</label>
+                  <input type="text" id="blood-pressure" class="form-input" placeholder="e.g., 120/80">
+                </div>
+              </div>
+              <div>
+                <div class="form-group">
+                  <label class="form-label" for="cholesterol">Cholesterol (mg/dL)</label>
+                  <input type="text" id="cholesterol" class="form-input" placeholder="e.g., 180">
+                </div>
+              </div>
+              <div>
+                <div class="form-group">
+                  <label class="form-label" for="glucose">Blood Glucose (mg/dL)</label>
+                  <input type="text" id="glucose" class="form-input" placeholder="e.g., 90">
+                </div>
+              </div>
+            </div>
+            <button class="save-button">Save Health Data</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Health Reports Tab -->
+      <div class="tab-content" id="reports-tab">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Health Reports</h3>
+            <span></span>
+          </div>
+          <div class="card-content">
+            <!-- Empty State -->
+            <div class="empty-state">
+              <div class="empty-icon">
+                <i class="fas fa-file-alt"></i>
+              </div>
+              <h4 class="empty-title">No health reports available</h4>
+              <p class="empty-description">
+                Complete your health profile first to generate personalized health reports.
+              </p>
+              <button class="primary-button">Complete Health Profile</button>
+            </div>
+            
+            <!-- Reports (hidden by default) -->
+            <div style="display: none;">
+              <div class="report-card">
+                <h4 class="report-title">Monthly Health Summary</h4>
+                <p class="report-description">
+                  Based on your health metrics, you're doing well overall. Your blood pressure readings
+                  are within normal range, but your cholesterol levels could be improved.
+                </p>
+                <button class="outline-button">
+                  <span>View Full Report</span>
+                  <i class="fas fa-external-link-alt"></i>
+                </button>
+              </div>
+              <div class="report-card">
+                <h4 class="report-title">Wellness Recommendations</h4>
+                <p class="report-description">
+                  We recommend focusing on reducing your cholesterol through dietary changes
+                  and regular exercise. Consider speaking with a nutritionist.
+                </p>
+                <button class="outline-button">
+                  <span>View Full Report</span>
+                  <i class="fas fa-external-link-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    // Simple tab functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabTriggers = document.querySelectorAll('.tab-trigger');
+      const tabContents = document.querySelectorAll('.tab-content');
+      
+      tabTriggers.forEach(trigger => {
+        trigger.addEventListener('click', function() {
+          // Remove active class from all triggers and contents
+          tabTriggers.forEach(t => t.classList.remove('active'));
+          tabContents.forEach(c => c.classList.remove('active'));
+          
+          // Add active class to clicked trigger
+          this.classList.add('active');
+          
+          // Show corresponding tab content
+          const tabId = this.getAttribute('data-tab');
+          document.getElementById(tabId + '-tab').classList.add('active');
+        });
+      });
+      
+      // Button to switch to health tab
+      const completeNowButton = document.querySelector('.alert-button');
+      if (completeNowButton) {
+        completeNowButton.addEventListener('click', function() {
+          tabTriggers.forEach(t => t.classList.remove('active'));
+          tabContents.forEach(c => c.classList.remove('active'));
+          
+          const healthTabTrigger = document.querySelector('[data-tab="health"]');
+          healthTabTrigger.classList.add('active');
+          document.getElementById('health-tab').classList.add('active');
+        });
+      }
+      
+      // Complete profile button in reports tab
+      const completeProfileButton = document.querySelector('.primary-button');
+      if (completeProfileButton) {
+        completeProfileButton.addEventListener('click', function() {
+          tabTriggers.forEach(t => t.classList.remove('active'));
+          tabContents.forEach(c => c.classList.remove('active'));
+          
+          const healthTabTrigger = document.querySelector('[data-tab="health"]');
+          healthTabTrigger.classList.add('active');
+          document.getElementById('health-tab').classList.add('active');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
